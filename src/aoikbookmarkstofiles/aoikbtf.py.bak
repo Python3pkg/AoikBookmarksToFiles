@@ -11,49 +11,49 @@ import os.path
 import re
 import sys
 try:
-    import urllib.parse
+    import urlparse
 except ImportError:
     import urllib.parse as urlparse
         
 try:
-    from urllib.parse import quote
+    from urllib import quote
 except ImportError:
     from urllib.parse import quote
     
 #/
 def make_file_name_by_url(url):
     #/
-    part_s = urllib.parse.urlsplit(url)
+    part_s = urlparse.urlsplit(url)
 
     #/
     host = part_s[1]
 
     if not host:
-        url = 'http://' + url
+        url = u'http://' + url
     
-        part_s = urllib.parse.urlsplit(url)
+        part_s = urlparse.urlsplit(url)
 
     #/
     host = part_s[1]
     
     path = part_s[2]
     
-    file_name = quote(host + path.replace('/', '--'))
+    file_name = quote(host + path.replace(u'/', u'--'))
     
     #/
     query = part_s.query
 
     if query:
-        file_name = '{}@{}'.format(file_name, query)
+        file_name = u'{}@{}'.format(file_name, query)
 
     #/
     fragment = part_s.fragment
 
     if fragment:
-        file_name = '{}#{}'.format(file_name, fragment)
+        file_name = u'{}#{}'.format(file_name, fragment)
     
     #/
-    file_name = file_name.strip('-')
+    file_name = file_name.strip(u'-')
     
     #/
     return file_name
@@ -76,7 +76,7 @@ def make_new_file_path(path):
     while os.path.exists(new_path):
         cnt += 1
 
-        new_path = '{}_{}{}'.format(path_noext, cnt, ext)
+        new_path = u'{}_{}{}'.format(path_noext, cnt, ext)
         
     #/
     return new_path
@@ -284,7 +284,7 @@ def main():
     if (sys.version_info[0] == 2 and sys.version_info < (2, 7))\
     or (sys.version_info[0] > 2 and sys.version_info < (3, 2)):
         #/ 6iBzArq
-        msg = """Error: Unsupported Python version.
+        msg = u"""Error: Unsupported Python version.
 Make sure your Python 2 version is >=2.7 or Python 3 version is >=3.2
 """
         
@@ -425,7 +425,7 @@ Make sure your Python 2 version is >=2.7 or Python 3 version is >=3.2
             assert False
         
         #/ I18n can not be initialized. So only provide English msg.
-        msg_fmt = 'Error: Failed loading i18n file for locale |{}|.\nPath is |{}|.\n'\
+        msg_fmt = u'Error: Failed loading i18n file for locale |{}|.\nPath is |{}|.\n'\
             .format(SixyIO.cae_to_u_safe(msg_ll), path)
             
         msg = msg_fmt.format(path)
@@ -434,7 +434,7 @@ Make sure your Python 2 version is >=2.7 or Python 3 version is >=3.2
         
         #/
         if debug_on:
-            SixyIO.stderr_write_fmt_safe('---\n{}---\n', tb_utxt)
+            SixyIO.stderr_write_fmt_safe(u'---\n{}---\n', tb_utxt)
               
         #/ 4mCE3Al
         return MAIN_RET_V_INIT_I18N_ERR
@@ -498,24 +498,24 @@ Make sure your Python 2 version is >=2.7 or Python 3 version is >=3.2
         #/
         sio.stderr_print_safe(tt('GnaSkZA'))
         sio.stderr_print_safe(SixyIO.get_native_encodings_info())
-        sio.stderr_print_safe('')
+        sio.stderr_print_safe(u'')
         
         #/
         sio.stderr_print_safe(tt('GSoLF46'))
         sio.stderr_print_safe(sio.get_sixyio_encodings_info())
-        sio.stderr_print_safe('')
+        sio.stderr_print_safe(u'')
     
     #/ 8cIUiJH
     if tmp_args_obj.show_locale_info:
         #/
-        sio.stderr_write_fmt_safe('{}\n{:<25}{}\n{:<25}{}\n{:<25}{}\n\n',
+        sio.stderr_write_fmt_safe(u'{}\n{:<25}{}\n{:<25}{}\n{:<25}{}\n\n',
             tt('AnRdkMS'),
-            'L10n locale hints:',
-            ', '.join(SixyIO.to_u_safe(x) for x in ll_s),
-            'L10n locale:',
-            SixyIO.to_u_safe(i18n.locale if i18n.locale else ''),
-            'L10n locale fb:',
-            SixyIO.to_u_safe(i18n.locale2 if i18n.locale2 else ''),
+            u'L10n locale hints:',
+            u', '.join(SixyIO.to_u_safe(x) for x in ll_s),
+            u'L10n locale:',
+            SixyIO.to_u_safe(i18n.locale if i18n.locale else u''),
+            u'L10n locale fb:',
+            SixyIO.to_u_safe(i18n.locale2 if i18n.locale2 else u''),
         )
     
     #/ 4iGnHUE
@@ -525,7 +525,7 @@ Make sure your Python 2 version is >=2.7 or Python 3 version is >=3.2
         for ll in I18n.get_locale_choices(i18n_dir):
             sio.stderr_print_safe(sio.fse_to_u_safe(ll))
         
-        sio.stderr_write_safe('\n')
+        sio.stderr_write_safe(u'\n')
     
     #/ 2pePlsG
     args_obj = parser.parse_args(args)
@@ -542,7 +542,7 @@ Make sure your Python 2 version is >=2.7 or Python 3 version is >=3.2
     
     #/ 5qyicC8
     if not output_dir_path_stxt:
-        output_dir_path = ''
+        output_dir_path = u''
         ## empty string works with the format at 8uZV0xm
         ##  to create a no-dir path.
     else:
@@ -563,7 +563,7 @@ Make sure your Python 2 version is >=2.7 or Python 3 version is >=3.2
             return MAIN_RET_V_DECODE_OUTPUT_DIR_PATH_ERR
         
         #/
-        output_dir_path += '/'
+        output_dir_path += u'/'
         ## |/| works with the format at 8uZV0xm to be a dir sep
         
         #/ 2cfu4Rm
@@ -618,7 +618,7 @@ Make sure your Python 2 version is >=2.7 or Python 3 version is >=3.2
     
     url_set = set()
     
-    re_obj = re.compile("""<DT><A HREF="(.+?)"(.*)>(.+)</A>""")
+    re_obj = re.compile(u"""<DT><A HREF="(.+?)"(.*)>(.+)</A>""")
 
     with input_file:
         #/ 2iWJQvK
@@ -690,38 +690,38 @@ Make sure your Python 2 version is >=2.7 or Python 3 version is >=3.2
                 
             #/ 4wFEmpy
             if esc_to_space or esc_to_empty:
-                esc_char = ' ' if esc_to_space else ''
+                esc_char = u' ' if esc_to_space else u''
                 
                 output_file_name_noext = output_file_name_noext\
-                    .replace('\\', esc_char)\
-                    .replace('/', esc_char)\
-                    .replace('<', esc_char)\
-                    .replace('>', esc_char)\
-                    .replace(':', esc_char)\
-                    .replace('*', esc_char)\
-                    .replace('?', esc_char)\
-                    .replace('"', esc_char)\
-                    .replace('|', esc_char)
+                    .replace(u'\\', esc_char)\
+                    .replace(u'/', esc_char)\
+                    .replace(u'<', esc_char)\
+                    .replace(u'>', esc_char)\
+                    .replace(u':', esc_char)\
+                    .replace(u'*', esc_char)\
+                    .replace(u'?', esc_char)\
+                    .replace(u'"', esc_char)\
+                    .replace(u'|', esc_char)
             else:
                 output_file_name_noext = output_file_name_noext\
-                    .replace('\\', '%5C')\
-                    .replace('/', '%2F')\
-                    .replace('<', '%3C')\
-                    .replace('>', '%3E')\
-                    .replace(':', '%3A')\
-                    .replace('*', '%2A')\
-                    .replace('?', '%3F')\
-                    .replace('"', '%22')\
-                    .replace('|', '%7C')
+                    .replace(u'\\', u'%5C')\
+                    .replace(u'/', u'%2F')\
+                    .replace(u'<', u'%3C')\
+                    .replace(u'>', u'%3E')\
+                    .replace(u':', u'%3A')\
+                    .replace(u'*', u'%2A')\
+                    .replace(u'?', u'%3F')\
+                    .replace(u'"', u'%22')\
+                    .replace(u'|', u'%7C')
     
             #/
             if fmt_is_de:
-                file_ext = 'desktop'
+                file_ext = u'desktop'
             else:
-                file_ext = 'url'
+                file_ext = u'url'
     
             #/ 8uZV0xm
-            output_file_path = SixyIO.format('{}{}.{}',
+            output_file_path = SixyIO.format(u'{}{}.{}',
                 output_dir_path,
                 output_file_name_noext,
                 file_ext
@@ -749,14 +749,14 @@ Make sure your Python 2 version is >=2.7 or Python 3 version is >=3.2
                 with url_file:
                     if fmt_is_de:
                         #/ 2v6nYc1
-                        url_file.write('[Desktop Entry]\n')
-                        url_file.write('Version=1.0\n')
-                        url_file.write('Type=Link\n')
-                        url_file.write_fmt('URL={}\n', url)
+                        url_file.write(u'[Desktop Entry]\n')
+                        url_file.write(u'Version=1.0\n')
+                        url_file.write(u'Type=Link\n')
+                        url_file.write_fmt(u'URL={}\n', url)
                     else:
                         #/ 5s4H9ZS
-                        url_file.write('[InternetShortcut]\n')
-                        url_file.write_fmt('URL={}\n', url)
+                        url_file.write(u'[InternetShortcut]\n')
+                        url_file.write_fmt(u'URL={}\n', url)
             except Exception as e:
                 #/ 8nqhZvO
                 sio.stderr_write_fmt_safe(tt('AfGS7Yr'), output_file_path)
